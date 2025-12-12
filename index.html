@@ -150,9 +150,7 @@
       const menuCadDev = document.querySelector('a[href="cadastro_desenvolvedores.html"]');
       const navbarContainer = document.querySelector(".navbar .container");
 
-      // ==============================
-      // 1. LOGIN / LOGOUT
-      // ==============================
+      // LOGIN / LOGOUT
       if (btnLogin) {
         if (user) {
           btnLogin.textContent = "Logout";
@@ -161,9 +159,9 @@
           btnLogin.href = "#";
 
           btnLogin.onclick = (e) => {
-            e.preventDefault(); // bloqueia o comportamento padrão do <a>
+            e.preventDefault();
             localStorage.removeItem("usuarioLogado");
-            window.location.href = "login.html"; // vai direto para a página de login
+            window.location.href = "login.html";
           };
 
         } else {
@@ -173,9 +171,6 @@
         }
       }
 
-      // ==============================
-      // 2. MOSTRAR NOME DO USUÁRIO
-      // ==============================
       if (user) {
         const divInfo = document.createElement("div");
         divInfo.classList.add("ms-3", "fw-bold");
@@ -190,27 +185,21 @@
         navbarContainer.appendChild(divInfo);
       }
 
-      // ==============================
-      // 3. MOSTRAR BOTÕES CORRETOS (ADMIN x USUÁRIO)
-      // ==============================
       if (user) {
         if (user.admin) {
+
           // Admin pode cadastrar desenvolvedor
           menuCadDev.style.display = "inline-block";
 
         } else {
-          // Usuário normal não cadastra dev
           menuCadDev.style.display = "none";
 
-          // Usuário pode cadastrar projeto
           btnCadastrar.style.display = "inline-block";
         }
       } else {
-        // Se não tiver logado → esconde tudo que é privado
         btnCadastrar.style.display = "none";
         menuCadDev.style.display = "none";
       }
-
     });
   </script>
 

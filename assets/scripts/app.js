@@ -1,15 +1,16 @@
+const API = "https://techtribo-backend.onrender.com";
+
 document.addEventListener("DOMContentLoaded", () => {
+
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
 
+  // Página Detalhes
   if (id) {
-    // Página de detalhes
-
-    const API = "https://techtribo-backend.onrender.com";
-
-    fetch(`${API}/desenvolvedores`)
+    fetch(`${API}/desenvolvedores/${id}`)
       .then(res => res.json())
       .then(dev => {
+
         document.getElementById("detalhe-info-geral").innerHTML = `
           <div class="d-flex align-items-center">
             <img src="${dev.imagem_principal}" alt="${dev.nome}" class="rounded me-3" width="150">
@@ -37,13 +38,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
         document.getElementById("detalhe-fotos-vinculadas").innerHTML = fotos;
       });
-  } else {
 
-    // Página index
-    fetch(`${API}/desenvolvedores/${id}`)
-      .then(res => res.json())
-      .then(devs => {
-        const lista = document.getElementById("lista-desenvolvedores");
+    return;
+  }
+
+  // Página Index
+  fetch(`${API}/desenvolvedores`)
+    .then(res => res.json())
+    .then(devs => {
+
+      const lista = document.getElementById("lista-desenvolvedores");
+
+      if (lista) {
         lista.innerHTML = devs.map(dev => `
           <div class="col-12 col-sm-6 col-md-4 col-lg-3">
             <div class="card shadow-sm h-100 text-center">
@@ -57,47 +63,37 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
           </div>
         `).join("");
-      });
-  }
+      }
+    });
 });
 
+// Favoritos
 function toggleFavorito(dev) {
-    const usuario = JSON.parse(localStorage.getItem("usuarioLogado"));
+  const usuario = JSON.parse(localStorage.getItem("usuarioLogado"));
+  if (!usuario) return alert("Faça login para favoritar!");
 
-    if (!usuario) {
-        alert("Você precisa estar logado para favoritar um desenvolvedor!");
-        return;
-    }
+  const chave = `favoritos_${usuario.id}`;
+  let favoritos = JSON.parse(localStorage.getItem(chave)) || [];
 
-    const chaveFavoritos = `favoritos_${usuario.id}`;
-    let favoritos = JSON.parse(localStorage.getItem(chaveFavoritos)) || [];
+  const jaExiste = favoritos.some(f => f.id === dev.id);
 
-    const jaExiste = favoritos.some(f => f.id === dev.id);
+  if (jaExiste) {
+    favoritos = favoritos.filter(f => f.id !== dev.id);
+  } else {
+    favoritos.push(dev);
+  }
 
-    if (jaExiste) {
-        favoritos = favoritos.filter(f => f.id !== dev.id);
-    } else {
-        favoritos.push(dev);
-    }
-
-    localStorage.setItem(chaveFavoritos, JSON.stringify(favoritos));
-
-    carregarDevs();
+  localStorage.setItem(chave, JSON.stringify(favoritos));
+  carregarDevs();
 }
-
-
 
 function isFavorito(id) {
   const usuario = JSON.parse(localStorage.getItem("usuarioLogado"));
   if (!usuario) return false;
 
-  const chaveFavoritos = `favoritos_${usuario.id}`;
-  const favoritos = JSON.parse(localStorage.getItem(chaveFavoritos)) || [];
-
+  const favoritos = JSON.parse(localStorage.getItem(`favoritos_${usuario.id}`)) || [];
   return favoritos.some(f => f.id === id);
 }
-
-
 
 async function carregarDevs() {
   const resposta = await fetch("https://projetos-puc.onrender.com/desenvolvedores");
@@ -108,6 +104,8 @@ async function carregarDevs() {
 
   const listaDestaques = document.getElementById("listaDestaques");
   const listaTodos = document.getElementById("listaTodos");
+
+  if (!listaDestaques || !listaTodos) return;
 
   listaDestaques.innerHTML = "";
   listaTodos.innerHTML = "";
@@ -121,70 +119,59 @@ async function carregarDevs() {
   });
 }
 
-
 function criarCardDev(dev) {
   const favorito = isFavorito(dev.id);
 
   return `
-        <div class="col-md-3 col-sm-6">
-            <div class="card shadow-sm border-0 position-relative">
+    <div class="col-md-3 col-sm-6">
+      <div class="card shadow-sm border-0 position-relative">
 
-                <button class="btn position-absolute top-0 end-0 m-2 favorito-btn"
-                        onclick='toggleFavorito(${JSON.stringify(dev)})'>
+        <button class="btn position-absolute top-0 end-0 m-2 favorito-btn"
+                onclick='toggleFavorito(${JSON.stringify(dev)})'>
+            <i class="bi ${favorito ? "bi-star-fill" : "bi-star"}"
+               style="color: white; font-size: 15px; text-shadow: 0px 0px 5px black;">
+            </i>
+        </button>
 
-                    <i class="bi ${favorito ? "bi-star-fill" : "bi-star"}"
-                       style="color: white; font-size: 15px; text-shadow: 0px 0px 5px black;">
-                    </i>
+        <img src="${dev.imagem_principal || dev.imagem}" 
+             class="card-img-top" 
+             style="height:250px; object-fit:cover;">
 
-                </button>
- 
-               <img src="${dev.imagem_principal || dev.imagem}" 
-               class="card-img-top" 
-               style="height:250px; object-fit:cover;">
+        <div class="card-body text-center">
+            <h5 class="fw-bold">${dev.nome}</h5>
+            <p class="text-muted">${dev.empresa}</p>
 
-
-                <div class="card-body text-center">
-                    <h5 class="fw-bold">${dev.nome}</h5>
-                    <p class="text-muted">${dev.empresa}</p>
-
-                    <a href="detalhe.html?id=${dev.id}" class="btn btn-primary">Ver Perfil</a>
-                </div>
-            </div>
+            <a href="detalhe.html?id=${dev.id}" class="btn btn-primary">Ver Perfil</a>
         </div>
-    `;
+      </div>
+    </div>
+  `;
 }
-
 
 carregarDevs();
 
-
-
-// Carregar projetos
+// Projetos Usários
 function carregarProjetos() {
   const lista = document.getElementById("projetosUsuarios");
-  const API = "https://techtribo-backend.onrender.com";
-  const projetos = JSON.parse(localStorage.getItem("projetos") || "[]");
+  if (!lista) return;
 
-  const usuarioLogado = JSON.parse(localStorage.getItem("usuarioLogado") || "{}");
+  const projetos = JSON.parse(localStorage.getItem("projetos") || "[]");
+  const usuario = JSON.parse(localStorage.getItem("usuarioLogado") || "{}");
 
   lista.innerHTML = "";
 
   projetos.forEach((p, index) => {
-
     lista.innerHTML += `
       <div class="col-12 col-md-6 col-lg-4">
         <div class="card shadow-sm text-center h-100">
 
-        ${p.imagem ? `
-  <img src="${p.imagem}" class="card-img-top" style="height:180px; object-fit:cover;">
-` : `
-  <div style="height:80px; background:#f1f1f1; border-bottom:1px solid #ddd; 
-              display:flex; align-items:center; justify-content:center; 
-              color:#777; font-size:14px;">
-    Sem imagem
-  </div>
-`}
-
+          ${p.imagem ? `
+            <img src="${p.imagem}" class="card-img-top" style="height:180px; object-fit:cover;">
+          ` : `
+            <div style="height:80px; background:#f1f1f1; display:flex; justify-content:center; align-items:center;">
+              Sem imagem
+            </div>
+          `}
 
           <div class="card-body">
             <h5 class="fw-bold">${p.nome}</h5>
@@ -192,11 +179,10 @@ function carregarProjetos() {
 
             <button class="btn btn-primary btn-sm" onclick="verProjeto(${index})">Ver Projeto</button>
 
-           ${usuarioLogado.admin ? ` 
-    <button class="btn btn-warning btn-sm me-1" onclick="editarProjeto(${index})">Editar</button>
-    <button class="btn btn-danger btn-sm" onclick="excluirProjeto(${index})">Excluir</button>
-    ` : ""}
-
+            ${usuario.admin ? `
+              <button class="btn btn-warning btn-sm me-1" onclick="editarProjeto(${index})">Editar</button>
+              <button class="btn btn-danger btn-sm" onclick="excluirProjeto(${index})">Excluir</button>
+            ` : ""}
           </div>
 
         </div>
@@ -205,15 +191,14 @@ function carregarProjetos() {
   });
 }
 
-
 carregarProjetos();
 
-document.getElementById("btnCadastrar").addEventListener("click", () => {
+document.getElementById("btnCadastrar")?.addEventListener("click", () => {
   const modal = new bootstrap.Modal(document.getElementById("modalCadastro"));
   modal.show();
 });
 
-// Excluir card
+// Excluir
 function excluirProjeto(index) {
   let projetos = JSON.parse(localStorage.getItem("projetos") || "[]");
   projetos.splice(index, 1);
@@ -221,20 +206,21 @@ function excluirProjeto(index) {
   carregarProjetos();
 }
 
+// Ver projeto
 function verProjeto(index) {
   const projetos = JSON.parse(localStorage.getItem("projetos") || "[]");
-  const projeto = projetos[index];
+  const p = projetos[index];
 
-  document.getElementById("verNome").innerText = `${projeto.projeto} — ${projeto.nome}`;
-  document.getElementById("verDescricao").innerText = projeto.descricao || "Sem descrição disponível";
-  document.getElementById("verLink").href = projeto.link || "#";
-  document.getElementById("verImagem").src = projeto.imagem || "https://via.placeholder.com/400x250?text=Sem+Imagem";
+  document.getElementById("verNome").innerText = `${p.projeto} — ${p.nome}`;
+  document.getElementById("verDescricao").innerText = p.descricao || "Sem descrição disponível";
+  document.getElementById("verLink").href = p.link || "#";
+  document.getElementById("verImagem").src = p.imagem || "https://via.placeholder.com/400x250?text=Sem+Imagem";
 
   const modal = new bootstrap.Modal(document.getElementById("modalVerProjeto"));
   modal.show();
 }
 
-// Projeto Usuário editar
+// Editar
 let editIndex = -1;
 
 function editarProjeto(index) {
@@ -245,7 +231,6 @@ function editarProjeto(index) {
   document.getElementById("devProjeto").value = p.projeto;
   document.getElementById("devDescricao").value = p.descricao;
   document.getElementById("devLink").value = p.link;
-
   document.getElementById("devImagem").value = "";
 
   editIndex = index;
@@ -254,18 +239,16 @@ function editarProjeto(index) {
   modal.show();
 }
 
-
-
-// Salvar edição
-document.getElementById("formCadastro").addEventListener("submit", async e => {
+// Salvar
+document.getElementById("formCadastro")?.addEventListener("submit", async e => {
   e.preventDefault();
 
   const nome = document.getElementById("devNome").value;
   const projeto = document.getElementById("devProjeto").value;
   const descricao = document.getElementById("devDescricao").value;
   const link = document.getElementById("devLink").value;
-
   const inputImg = document.getElementById("devImagem");
+
   let imagemBase64 = "";
 
   if (inputImg.files.length > 0) {
@@ -282,15 +265,8 @@ document.getElementById("formCadastro").addEventListener("submit", async e => {
       link,
       imagem: imagemBase64 || projetos[editIndex].imagem
     };
-
   } else {
-    projetos.push({
-      nome,
-      projeto,
-      descricao,
-      link,
-      imagem: imagemBase64
-    });
+    projetos.push({ nome, projeto, descricao, link, imagem: imagemBase64 });
   }
 
   localStorage.setItem("projetos", JSON.stringify(projetos));
@@ -312,11 +288,6 @@ function converterParaBase64(arquivo) {
   });
 }
 
-
-document.getElementById("btnExplorar").addEventListener("click", function () {
-  document.getElementById("todosDevs").scrollIntoView({
-    behavior: "smooth"
-  });
+document.getElementById("btnExplorar")?.addEventListener("click", () => {
+  document.getElementById("todosDevs").scrollIntoView({ behavior: "smooth" });
 });
-
-
