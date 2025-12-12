@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sobre • TechTribo</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        .hero {
+            background: linear-gradient(180deg, #071b3a 0%, rgba(7, 27, 58, 0.85) 60%);
+            color: #fff;
+            padding: 4.5rem 0;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28 255,255,255, 1%29)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        .card-ico {
+            font-size: 2.2rem;
+            color: #0d6efd;
+        }
+
+        .section {
+            padding: 3rem 0;
+        }
+
+        .contact-list a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        @media (min-width: 992px) {
+            .hero {
+                text-align: left;
+                padding-left: 6rem;
+                padding-right: 6rem;
+            }
+        }
+
+        /* Resposividades*/
+        @media (max-width: 576px) {
+            .hero {
+                padding: 2.5rem 1.2rem;
+                text-align: center !important;
+            }
+
+            .hero h1 {
+                font-size: 1.9rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .section {
+                padding: 2rem 0;
+            }
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        @media (max-width: 576px) {
+            .card {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .card-body {
+                padding: 1.2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .col-md-4 img {
+                width: 100%;
+                margin-top: 1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+
+            h2,
+            h3,
+            h4 {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+
+            p,
+            .small,
+            .lead {
+                font-size: 0.95rem;
+                line-height: 1.4rem;
+            }
+        }
+
+        .container,
+        .section,
+        .hero {
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg" style="background-color: #001846;">
+        <div class="container">
+
+            <a class="navbar-brand text-white fw-semibold" href="index.html">
+                TechTribo - Tecnologia
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menu">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+
+                    <li class="nav-item"><a class="nav-link text-white" href="index.html">Início</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="apresentacao.html">Apresentação</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="favoritos.html">Favoritos ⭐</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="cadastro_desenvolvedores.html">Cadastrar
+                            Desenvolvedor</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="informacoes.html">Sobre o Site</a></li>
+
+                    <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
+                        <a href="login.html" class="btn btn-outline-light" id="btnLogin">Login</a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-5">Sobre a TechTribo</h1>
+                    <p class="lead mt-3 mb-0">
+                        A TechTribo é uma plataforma criada para reunir, apresentar e valorizar desenvolvedores e seus
+                        projetos — um espaço para aprender, inspirar e conectar talentos na área de tecnologia.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTEÚDO -->
+    <main class="container">
+
+        <section class="section">
+            <div class="row g-4 align-items-center">
+                <div class="col-lg-8">
+                    <h2 class="h3">Nossa missão</h2>
+                    <p class="text-muted">Promover a visibilidade de desenvolvedores e seus trabalhos, incentivando o
+                        aprendizado, a evolução e a troca de conhecimento dentro da comunidade tecnológica.</p>
+
+                    <h2 class="h3 mt-4">Nossa visão</h2>
+                    <p class="text-muted">Ser uma referência para divulgação de perfis, habilidades e projetos — uma
+                        plataforma simples, organizada e acolhedora para desenvolvedores de todos os níveis.</p>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="mb-3"><i class="bi bi-lightning-charge-fill card-ico"></i></div>
+                            <h5 class="card-title">Por que a TechTribo?</h5>
+                            <p class="small text-muted mb-0">Porque toda carreira merece visibilidade e cada projeto
+                                pode inspirar outras pessoas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- O que encontra -->
+        <section class="section bg-white rounded shadow-sm p-4">
+            <h3 class="mb-4">O que você encontra aqui</h3>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="d-flex gap-3">
+                        <div class="flex-shrink-0 display-6 text-primary"><i class="bi bi-person-lines-fill"></i></div>
+                        <div>
+                            <h5>Perfis de Desenvolvedores</h5>
+                            <p class="small text-muted mb-0">Nome, bio, formação, habilidades e projetos.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="d-flex gap-3">
+                        <div class="flex-shrink-0 display-6 text-primary"><i class="bi bi-folder-symlink"></i></div>
+                        <div>
+                            <h5>Projetos Reais</h5>
+                            <p class="small text-muted mb-0">Cadastre seus projetos com links e imagens.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="d-flex gap-3">
+                        <div class="flex-shrink-0 display-6 text-primary"><i class="bi bi-star"></i></div>
+                        <div>
+                            <h5>Favoritos</h5>
+                            <p class="small text-muted mb-0">Salve seus devs preferidos.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Como funciona -->
+        <section class="section">
+            <h3 class="mb-4">Como funciona</h3>
+
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <ul class="list-unstyled">
+                        <li class="mb-3"><strong>1. Explorar perfis:</strong>
+                            <div class="text-muted small">Navegue pelos desenvolvedores.</div>
+                        </li>
+                        <li class="mb-3"><strong>2. Favoritar:</strong>
+                            <div class="text-muted small">Use a estrela para salvar favoritos.</div>
+                        </li>
+                        <li class="mb-3"><strong>3. Cadastrar projetos:</strong>
+                            <div class="text-muted small">Adicione projetos completos.</div>
+                        </li>
+                        <li class="mb-3"><strong>4. Visualizar detalhes:</strong>
+                            <div class="text-muted small">Cada dev tem sua página exclusiva.</div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="ratio ratio-16x9 rounded overflow-hidden shadow-sm">
+                        <img src="assets/img/TechTribo-logo.png" class="w-100 h-100" style="object-fit: cover;">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section bg-white rounded shadow-sm p-4">
+            <h3 class="mb-4">Tecnologias utilizadas</h3>
+
+            <div class="row g-3">
+                <div class="col-sm-6 col-md-4">
+                    <div class="p-3 border rounded d-flex align-items-start gap-3">
+                        <i class="bi bi-code-slash fs-3 text-primary"></i>
+                        <div>
+                            <strong>HTML5 & CSS3</strong>
+                            <div class="small text-muted">Estrutura e estilo das páginas</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="p-3 border rounded d-flex align-items-start gap-3">
+                        <i class="bi bi-cpu-fill fs-3 text-primary"></i>
+                        <div>
+                            <strong>JavaScript</strong>
+                            <div class="small text-muted">Manipulação do DOM, fetch e lógica</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="p-3 border rounded d-flex align-items-start gap-3">
+                        <i class="bi bi-bootstrap-fill fs-3 text-primary"></i>
+                        <div>
+                            <strong>Bootstrap 5</strong>
+                            <div class="small text-muted">Componentes e layout responsivo</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="p-3 border rounded d-flex align-items-start gap-3">
+                        <i class="bi bi-server fs-3 text-primary"></i>
+                        <div>
+                            <strong>JSON Server</strong>
+                            <div class="small text-muted">API fake para demonstrar consumo de dados</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4">
+                    <div class="p-3 border rounded d-flex align-items-start gap-3">
+                        <i class="bi bi-hdd-network fs-3 text-primary"></i>
+                        <div>
+                            <strong>LocalStorage</strong>
+                            <div class="small text-muted">Armazenamento local para favoritos e projetos</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Objetivo do projeto -->
+        <section class="section">
+            <h3>Objetivo do projeto</h3>
+            <p class="text-muted">Este site foi desenvolvido como um projeto acadêmico para praticar integração entre
+                front-end e APIs, manipulação de DOM, armazenamento local e boas práticas de usabilidade. A ideia é
+                oferecer uma base que possa crescer com novos recursos e integrações no futuro.</p>
+        </section>
+
+        <section class="section bg-white rounded shadow-sm p-4">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h4>Desenvolvido por</h4>
+                    <p class="mb-1"><strong>Carlos Daniel Tempo Dutra</strong></p>
+                    <p class="text-muted small mb-3">Estudante de desenvolvimento web — criador deste projeto acadêmico.
+                    </p>
+
+                    <div class="contact-list small">
+                        <p class="mb-1"><i class="bi bi-envelope-fill me-2"></i> carlos.dutra.1607783@sga.pucminas.br
+                        </p>
+                        <p class="mb-0"><i class="bi bi-linkedin me-2"></i> <a href="#" target="_blank">LinkedIn</a> •
+                            <i class="bi bi-github ms-3 me-2"></i> <a href="#" target="_blank">GitHub</a>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4 text-center">
+                    <img src="assets/img/Simbolo-TechTribo.png" style="height: 200px;" alt="Desenvolvedor"
+                        class="img-fluid rounded shadow-sm">
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="py-4 mt-4 bg-white border-top">
+        <div class="container text-center small text-muted">
+            © <span id="anoCorrente"></span> TechTribo • Projeto acadêmico desenvolvido por Carlos Daniel Tempo Dutra
+        </div>
+    </footer>
+
+    <script src="assets/scripts/app.js"></script>
+
+    <script>
+        document.getElementById('anoCorrente').innerText = new Date().getFullYear();
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const user = JSON.parse(localStorage.getItem("usuarioLogado"));
+            const btnLogin = document.getElementById("btnLogin");
+            const itemCadastrarDev = document.querySelector('a[href="cadastro_desenvolvedores.html"]');
+
+            if (!btnLogin) return;
+
+            if (user) {
+                btnLogin.textContent = "Logout";
+                btnLogin.classList.remove("btn-outline-light");
+                btnLogin.classList.add("btn-danger");
+                btnLogin.href = "#";
+
+                btnLogin.onclick = () => {
+                    localStorage.removeItem("usuarioLogado");
+                    window.location.reload();
+                };
+
+                // Oculta botão de cadastrar dev se usuário não for admin
+                if (!user.admin && itemCadastrarDev) {
+                    itemCadastrarDev.style.display = "none";
+                }
+
+            } else {
+                btnLogin.textContent = "Login";
+                btnLogin.href = "login.html";
+            }
+        });
+    </script>
+
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
