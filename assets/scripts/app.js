@@ -1,7 +1,7 @@
 const API = "https://techtribo-backend.onrender.com";
 
+// ---------------------- DETALHES DO DESENVOLVEDOR ----------------------
 document.addEventListener("DOMContentLoaded", () => {
-
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
 
@@ -10,31 +10,32 @@ document.addEventListener("DOMContentLoaded", () => {
     fetch(`${API}/desenvolvedores/${id}`)
       .then(res => res.json())
       .then(dev => {
-
         document.getElementById("detalhe-info-geral").innerHTML = `
           <div class="d-flex align-items-center">
-            <img src="${dev.imagem_principal}" alt="${dev.nome}" class="rounded me-3" width="150">
+            <img src="${dev.imagem}" alt="${dev.nome}" class="rounded me-3" width="150">
             <div>
               <h3>${dev.nome}</h3>
               <p class="text-muted">${dev.empresa}</p>
               <p>${dev.descricao}</p>
-              <p><strong>Formação:</strong> ${dev.formacao}</p>
-              <p><strong>Linguagens:</strong> ${dev.linguagens}</p>
-              <p><strong>Experiência:</strong> ${dev.experiencia}</p>
+              <p><strong>Formação:</strong> ${dev.formacao || "Não informado"}</p>
+              <p><strong>Linguagens:</strong> ${dev.linguagens || "Não informado"}</p>
+              <p><strong>Experiência:</strong> ${dev.experiencia || "Não informado"}</p>
             </div>
           </div>
         `;
 
-        const fotos = dev.projetos.map(p => `
-          <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-              <img src="${p.src}" class="card-img-top" alt="">
-              <div class="card-body text-center">
-                <p>${p.descricao}</p>
+        const fotos = (dev.projetos || [])
+          .map(p => `
+            <div class="col-md-4">
+              <div class="card h-100 shadow-sm">
+                <img src="${p.src}" class="card-img-top" alt="Imagem do projeto">
+                <div class="card-body text-center">
+                  <p>${p.descricao}</p>
+                </div>
               </div>
             </div>
-          </div>
-        `).join("");
+          `)
+          .join("");
 
         document.getElementById("detalhe-fotos-vinculadas").innerHTML = fotos;
       });
@@ -42,45 +43,44 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // Página Index
+  // ---------------------- PÁGINA INDEX ----------------------
   fetch(`${API}/desenvolvedores`)
     .then(res => res.json())
     .then(devs => {
-
       const lista = document.getElementById("lista-desenvolvedores");
 
       if (lista) {
-        lista.innerHTML = devs.map(dev => `
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-            <div class="card shadow-sm h-100 text-center">
-              <img src="${dev.imagem_principal}" class="card-img-top" alt="${dev.nome}">
-              <div class="card-body">
-                <h5>${dev.nome}</h5>
-                <h6 class="text-muted">${dev.empresa}</h6>
-                <p class="small">${dev.descricao.substring(0, 60)}...</p>
-                <a href="detalhes.html?id=${dev.id}" class="btn btn-primary btn-sm mt-2">Ver Detalhes</a>
+        lista.innerHTML = devs
+          .map(dev => `
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+              <div class="card shadow-sm h-100 text-center">
+                <img src="${dev.imagem}" class="card-img-top" alt="${dev.nome}">
+                <div class="card-body">
+                  <h5>${dev.nome}</h5>
+                  <h6 class="text-muted">${dev.empresa}</h6>
+                  <p class="small">${dev.descricao?.substring(0, 60) || ""}...</p>
+                  <a href="detalhes.html?id=${dev.id}" class="btn btn-primary btn-sm mt-2">Ver Detalhes</a>
+                </div>
               </div>
             </div>
-          </div>
-        `).join("");
+          `)
+          .join("");
       }
     });
 });
 
-// Favoritos
-function toggleFavorito(dev) {
+// ---------------------- FAVORITOS ----------------------
+function toggleFavorito(id) {
   const usuario = JSON.parse(localStorage.getItem("usuarioLogado"));
   if (!usuario) return alert("Faça login para favoritar!");
 
   const chave = `favoritos_${usuario.id}`;
   let favoritos = JSON.parse(localStorage.getItem(chave)) || [];
 
-  const jaExiste = favoritos.some(f => f.id === dev.id);
-
-  if (jaExiste) {
-    favoritos = favoritos.filter(f => f.id !== dev.id);
+  if (favoritos.includes(id)) {
+    favoritos = favoritos.filter(f => f !== id);
   } else {
-    favoritos.push(dev);
+    favoritos.push(id);
   }
 
   localStorage.setItem(chave, JSON.stringify(favoritos));
@@ -92,11 +92,12 @@ function isFavorito(id) {
   if (!usuario) return false;
 
   const favoritos = JSON.parse(localStorage.getItem(`favoritos_${usuario.id}`)) || [];
-  return favoritos.some(f => f.id === id);
+  return favoritos.includes(id);
 }
 
+// ---------------------- CARREGAR DEVS (HOME) ----------------------
 async function carregarDevs() {
-  const resposta = await fetch("https://projetos-puc.onrender.com/desenvolvedores");
+  const resposta = await fetch(`${API}/desenvolvedores`);
   const devs = await resposta.json();
 
   const destaques = devs.filter(d => d.destaque === true);
@@ -110,13 +111,8 @@ async function carregarDevs() {
   listaDestaques.innerHTML = "";
   listaTodos.innerHTML = "";
 
-  destaques.forEach(dev => {
-    listaDestaques.innerHTML += criarCardDev(dev);
-  });
-
-  todos.forEach(dev => {
-    listaTodos.innerHTML += criarCardDev(dev);
-  });
+  listaDestaques.innerHTML = destaques.map(criarCardDev).join("");
+  listaTodos.innerHTML = todos.map(criarCardDev).join("");
 }
 
 function criarCardDev(dev) {
@@ -127,13 +123,12 @@ function criarCardDev(dev) {
       <div class="card shadow-sm border-0 position-relative">
 
         <button class="btn position-absolute top-0 end-0 m-2 favorito-btn"
-                onclick='toggleFavorito(${JSON.stringify(dev)})'>
+                onclick="toggleFavorito('${dev.id}')">
             <i class="bi ${favorito ? "bi-star-fill" : "bi-star"}"
-               style="color: white; font-size: 15px; text-shadow: 0px 0px 5px black;">
-            </i>
+               style="color: white; font-size: 15px; text-shadow: 0px 0px 5px black;"></i>
         </button>
 
-        <img src="${dev.imagem_principal || dev.imagem}" 
+        <img src="${dev.imagem}" 
              class="card-img-top" 
              style="height:250px; object-fit:cover;">
 
@@ -150,7 +145,7 @@ function criarCardDev(dev) {
 
 carregarDevs();
 
-// Projetos Usários
+// ---------------------- PROJETOS DO USUÁRIO ----------------------
 function carregarProjetos() {
   const lista = document.getElementById("projetosUsuarios");
   if (!lista) return;
@@ -158,10 +153,8 @@ function carregarProjetos() {
   const projetos = JSON.parse(localStorage.getItem("projetos") || "[]");
   const usuario = JSON.parse(localStorage.getItem("usuarioLogado") || "{}");
 
-  lista.innerHTML = "";
-
-  projetos.forEach((p, index) => {
-    lista.innerHTML += `
+  lista.innerHTML = projetos
+    .map((p, index) => `
       <div class="col-12 col-md-6 col-lg-4">
         <div class="card shadow-sm text-center h-100">
 
@@ -187,18 +180,13 @@ function carregarProjetos() {
 
         </div>
       </div>
-    `;
-  });
+    `)
+    .join("");
 }
 
 carregarProjetos();
 
-document.getElementById("btnCadastrar")?.addEventListener("click", () => {
-  const modal = new bootstrap.Modal(document.getElementById("modalCadastro"));
-  modal.show();
-});
-
-// Excluir
+// ---------------------- EXCLUIR PROJETO ----------------------
 function excluirProjeto(index) {
   let projetos = JSON.parse(localStorage.getItem("projetos") || "[]");
   projetos.splice(index, 1);
@@ -206,7 +194,7 @@ function excluirProjeto(index) {
   carregarProjetos();
 }
 
-// Ver projeto
+// ---------------------- VER PROJETO ----------------------
 function verProjeto(index) {
   const projetos = JSON.parse(localStorage.getItem("projetos") || "[]");
   const p = projetos[index];
@@ -216,11 +204,10 @@ function verProjeto(index) {
   document.getElementById("verLink").href = p.link || "#";
   document.getElementById("verImagem").src = p.imagem || "https://via.placeholder.com/400x250?text=Sem+Imagem";
 
-  const modal = new bootstrap.Modal(document.getElementById("modalVerProjeto"));
-  modal.show();
+  new bootstrap.Modal(document.getElementById("modalVerProjeto")).show();
 }
 
-// Editar
+// ---------------------- EDITAR PROJETO ----------------------
 let editIndex = -1;
 
 function editarProjeto(index) {
@@ -235,11 +222,10 @@ function editarProjeto(index) {
 
   editIndex = index;
 
-  const modal = new bootstrap.Modal(document.getElementById("modalCadastro"));
-  modal.show();
+  new bootstrap.Modal(document.getElementById("modalCadastro")).show();
 }
 
-// Salvar
+// ---------------------- SALVAR PROJETO ----------------------
 document.getElementById("formCadastro")?.addEventListener("submit", async e => {
   e.preventDefault();
 
@@ -277,6 +263,7 @@ document.getElementById("formCadastro")?.addEventListener("submit", async e => {
   e.target.reset();
 });
 
+// Conversor de imagem para Base64
 function converterParaBase64(arquivo) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -288,6 +275,8 @@ function converterParaBase64(arquivo) {
   });
 }
 
+// Botão "Explorar"
 document.getElementById("btnExplorar")?.addEventListener("click", () => {
   document.getElementById("todosDevs").scrollIntoView({ behavior: "smooth" });
 });
+
